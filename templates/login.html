@@ -1,0 +1,17 @@
+{% extends "templates/login.html" %}
+
+{% block main %}
+<div class="container text-center easi">
+    <h1>{{ easi_hub_title or 'EASI JupyterHub' }}</h1>
+    <h2>{{ easi_hub_subtitle }}</h2>
+    <p>
+      {% if easi_welcome %}
+      {{ (easi_welcome | safe) }}
+      {% else %}
+      Welcome to this EASI JupyterHub. For more information about EASI,
+      visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.
+      {% endif %}
+    </p>
+</div>
+{{ super() }}
+{% endblock %}
