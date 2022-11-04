@@ -56,10 +56,12 @@
 
 .navbar.navbar-default .navbar-nav>li>a:hover, .navbar.navbar-default .navbar-nav>li>a:focus {
     background-color: #00E9C5;
+    color: #FFF;
 }
 
 .navbar.navbar-default .navbar-nav>.open>a, .navbar.navbar-default .navbar-nav>.open>a:hover, .navbar.navbar-default .navbar-nav>.open>a:focus  {
     background-color: #00E9C5;
+    color: #FFF;
 }
 
 .navbar-nav>li>a {
