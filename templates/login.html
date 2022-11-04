@@ -16,7 +16,7 @@
       {% if easi_partner_logos %}
       <div class="easi-partner-logos">
         {% for logo in easi_partner_logos %}
-        <img src="{{static_url(logo)}}">
+        <a href="{{logo.href}}"><img src="{{static_url(logo.src)}}"></a>
         {% endfor %}
       </div>
       {% endif %}
