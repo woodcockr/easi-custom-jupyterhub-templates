@@ -11,6 +11,13 @@
       Welcome to this EASI JupyterHub. For more information about EASI,
       visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.
       {% endif %}
+      {% if easi_partner_logos %}
+      <div class="easi-partner-logos">
+        {% for logo in easi_partner_logos %}
+        <img src="{ logo }">
+        {% endfor %}
+      </div>
+      {% endif %}
     </p>
 </div>
 {{ super() }}
