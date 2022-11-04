@@ -1,64 +1,83 @@
-@font-face {
-    font-family: "Panton Black Caps";
-    /* src: url("http://ff.cdn.1001fonts.net/p/a/panton.black-caps.otf") */
-    src: url("panton.black-caps.otf");
-}
-
-@font-face {
-    font-family: "Panton Light Caps";
-    src: url("panton.light-caps.otf");
-}
-
 .easi h1 {
-  color: #003B71;
-  font-family: "Panton Black Caps";
+  color: #043672;
+  font-family: "Montserrat",sans-serif;
+  font-weight: bold;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
 .easi h2 {
-  font-family: "Panton Light Caps";
+  font-family: "Montserrat",sans-serif;
   font-size: 2rem;
-  color: #003B71;
+  color: #043672;
   margin-bottom: 20px;
 }
 
 .easi p {
   font-size: 1.7rem;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "Montserrat",sans-serif;
 }
 
 
 .navbar.navbar-default {
-  background: -webkit-linear-gradient(left, #ffffff, #003B71); /* Chrome10+, Safari5.1+ */
-  background: linear-gradient(left, #ffffff, #003B71);
+  background: -webkit-linear-gradient(left, #ffffff, #043672); /* Chrome10+, Safari5.1+ */
+  background: linear-gradient(left, #ffffff, #043672);
   border: None;
 }
 
 .navbar.navbar-default .navbar-nav>li>a, .navbar.navbar-default .navbar-text {
+    color: #043672;
+}
+
+.navbar.navbar-default .navbar-right .navbar-text {
     color: #fff;
 }
 
+.navbar.navbar-default .navbar-right .btn-jupyter {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .navbar.navbar-default .navbar-nav>li>a:hover, .navbar.navbar-default .navbar-nav>li>a:focus {
-    background-color: #00a3b0;
+    background-color: #00E9C5;
 }
 
 .navbar.navbar-default .navbar-nav>.open>a, .navbar.navbar-default .navbar-nav>.open>a:hover, .navbar.navbar-default .navbar-nav>.open>a:focus  {
-    background-color: #00a3b0;
+    background-color: #00E9C5;
+}
+
+.navbar-nav>li>a {
+    line-height: 32px;
 }
 
 #login-main .auth-form-header {
-    background: #00a9ce !important;
+    background: #00E9C5 !important;
 }
 
 
 .btn-jupyter {
     color: #fff;
-    background-color: #E50051 !important;
-    border-color: #E50051 !important;
+    background-color: #00E9C5 !important;
+    border-color: #00E9C5 !important;
+}
+
+.btn-jupyter:hover {
+  color: #033672 !important;
 }
 
 #login-main .service-login {
     vertical-align: top !important;
     padding-top: 60px;
+}
+
+#jupyterhub-logo .jpy-logo {
+    height: 40px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 30px;
+    border: none;
+}
+
+#spawn_form {
+    margin-bottom: 50px;
 }

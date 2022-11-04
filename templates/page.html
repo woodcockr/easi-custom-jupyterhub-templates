@@ -8,6 +8,18 @@
 {# requires jupyerhub > 0.9.4 https://github.com/jupyterhub/jupyterhub/pull/2296 #}
 {% block logo %}
 <span id="jupyterhub-logo" class="pull-left">
-    <a href="{{logo_url or base_url}}"><img src="{{static_url("extra-assets/images/jupyter_easi_small_logo.png") }}" alt='JupyterHub' class='jpy-logo' title='Home'/></a>
+    <a href="{{logo_url or base_url}}"><img src="{{static_url("extra-assets/images/datacube-chile-transparente.png") }}" alt='JupyterHub' class='jpy-logo' title='Home'/></a>
+</span>
+{% endblock %}
+
+{% block login_widget %}
+<span id="login_widget">
+    {% if user %}
+    <p class="navbar-text">{{user.name}}</p>
+    <a id="logout" role="button" class="btn navbar-btn btn-jupyter btn-default" href="{{logout_url}}"> <i aria-hidden="true"
+            class="fa fa-sign-out"></i> Logout</a>
+    {% else %}
+    <a id="login" role="button" class="btn navbar-btn btn-jupyter btn-default" href="{{login_url}}">Login</a>
+    {% endif %}
 </span>
 {% endblock %}
