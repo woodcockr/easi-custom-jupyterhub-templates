@@ -4,12 +4,14 @@
 <div class="container text-center easi">
     <h1>{{ easi_hub_title or 'EASI JupyterHub' }}</h1>
     <h2>{{ easi_hub_subtitle }}</h2>
-    <p>
+    <div>
       {% if easi_welcome %}
-      {{ (easi_welcome | safe) }}
+      {% for paragraph in easi_welcome %}
+      <p>{{ (paragraph | safe) }}</p>
+      {% endfor %}
       {% else %}
-      Welcome to this EASI JupyterHub. For more information about EASI,
-      visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.
+      <p>Welcome to this EASI JupyterHub. For more information about EASI,
+      visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.</p>
       {% endif %}
       {% if easi_partner_logos %}
       <div class="easi-partner-logos">
@@ -18,7 +20,7 @@
         {% endfor %}
       </div>
       {% endif %}
-    </p>
+    </div>
 </div>
 {{ super() }}
 {% endblock %}
