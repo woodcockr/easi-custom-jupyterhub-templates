@@ -23,3 +23,24 @@
     {% endif %}
 </span>
 {% endblock %}
+
+{% block announcement %}
+{% if announcement %}
+    {% if announcement_level %}
+        {% if announcement_level == "info" %}
+            {% set level = "alert-info" %}
+        {% elif announcement_level == "success" %}
+            {% set level = "alert-success" %}
+        {% elif announcement_level == "warning" %}
+            {% set level = "alert-warning" %}
+        {% elif announcement_level == "danger" %}
+            {% set level = "alert-danger" %}
+        {% else %}
+            {% set level = "alert-warning" %}
+        {% endif %}
+    {% endif %}
+<div class="container text-center announcement alert {{ level }}">
+    {{ announcement | safe }}
+</div>
+{% endif %}
+{% endblock %}
