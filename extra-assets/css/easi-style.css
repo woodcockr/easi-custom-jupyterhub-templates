@@ -18,14 +18,14 @@
   font-family: "Montserrat",sans-serif;
 }
 
-.btn-jupyter {
+.btn-jupyter, #stop, #start {
     color: #fff;
     background-color: #00E9C5 !important;
     border-color: #00E9C5 !important;
     border: none !important;
 }
 
-.btn-jupyter:hover {
+.btn-jupyter:hover, #stop:hover, #start:hover {
     color: #033672 !important;
 }
 
