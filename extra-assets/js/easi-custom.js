@@ -10,7 +10,7 @@
   $("#allocation-select").hide()
 
   $(document).on('click', '.allocation-btns .btn-easi-toggle', function() {
-      $('.btn-easi-toggle').removeClass('on');
+      $('.allocation-btns .btn-easi-toggle').removeClass('on');
       $(this).addClass('on');
       $("#allocation-select").val($(this).data("value"));
   });
@@ -27,7 +27,7 @@
   $("#resources-select").hide()
 
   $(document).on('click', '.resource-btns .btn-easi-toggle', function() {
-      $('.btn-easi-toggle').removeClass('on');
+      $('.resource-btns .btn-easi-toggle').removeClass('on');
       $(this).addClass('on');
       $("#resources-select").val($(this).data("value"));
       showInfo();
