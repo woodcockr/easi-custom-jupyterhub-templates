@@ -29,6 +29,39 @@
     color: #033672 !important;
 }
 
+.resource-btns, .allocation-btns {
+    display: flex;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+    flex-grow: 0;
+    flex-wrap: wrap;
+}
+
+.btn.btn-easi-toggle {
+    color: #033672;
+    background: #e9edf3;
+    border: solid 1px #033672;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    flex-basis: 100px;
+    flex-grow: 0;
+    white-space: pre-wrap;
+}
+
+.btn.btn-easi-toggle:hover {
+    background-color: #bec8da;
+}
+
+.btn.btn-easi-toggle.on {
+    background-color: #033672;
+    color: #FFF;
+}
+
+.allocation-btns .btn-easi-toggle {
+    flex-basis: 171px;
+}
+
 .navbar.navbar-default {
   background: -webkit-linear-gradient(left, #ffffff, #043672); /* Chrome10+, Safari5.1+ */
   background: linear-gradient(left, #ffffff, #043672);
