@@ -7,6 +7,7 @@
     var btn = $('<div class="btn btn-easi-toggle" data-value="'+$(this).val()+'">'+label+'</div>');
     $('.allocation-btns').append(btn);
   });
+  $($('.allocation-btns .btn')[0]).addClass('on');
   $("#allocation-select").hide()
 
   $(document).on('click', '.allocation-btns .btn-easi-toggle', function() {
@@ -16,18 +17,19 @@
   });
 
   // RESOURCE BUTTONS
-  $("#resources-select").parent().append("<div class='resource-btns'></div>")
+  $("#resources-select").parent().append("<div class='resources-btns'></div>")
 
   $("#resources-select option").each(function() {
     label = $(this).val().replace(/\;/g, "<br>")
     label = label.replace(/\|\-/g,"<strong>").replace(/\-\|/g,"</strong><br>")
     var btn = $('<div class="btn btn-easi-toggle" data-value="'+$(this).val()+'">'+label+'</div>');
-    $('.resource-btns').append(btn);
+    $('.resources-btns').append(btn);
   });
+  $($('.resources-btns .btn')[0]).addClass('on');
   $("#resources-select").hide()
 
-  $(document).on('click', '.resource-btns .btn-easi-toggle', function() {
-      $('.resource-btns .btn-easi-toggle').removeClass('on');
+  $(document).on('click', '.resources-btns .btn-easi-toggle', function() {
+      $('.resources-btns .btn-easi-toggle').removeClass('on');
       $(this).addClass('on');
       $("#resources-select").val($(this).data("value"));
       showInfo();

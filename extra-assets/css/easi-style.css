@@ -29,7 +29,7 @@
     color: #033672 !important;
 }
 
-.resource-btns, .allocation-btns {
+.resources-btns, .allocation-btns {
     display: flex;
     justify-content: flex-start;
     align-content: stretch;
