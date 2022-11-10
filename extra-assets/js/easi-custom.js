@@ -19,8 +19,8 @@
   $("#resources-select").parent().append("<div class='resource-btns'></div>")
 
   $("#resources-select option").each(function() {
-    label = $(this).text().replace(/\;/g, "<br>")
-    //label = label.replace(/\<\</g,"<strong>").replace(/\>\>/g,"</strong><br>")
+    label = $(this).val().replace(/\;/g, "<br>")
+    label = label.replace(/\|\-/g,"<strong>").replace(/\-\|/g,"</strong><br>")
     var btn = $('<div class="btn btn-easi-toggle" data-value="'+$(this).val()+'">'+label+'</div>');
     $('.resource-btns').append(btn);
   });
