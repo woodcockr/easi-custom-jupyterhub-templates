@@ -4,7 +4,7 @@
 
   $("#allocation-select option").each(function() {
     if ($(this).val() != "UNALLOCATED") { // Don't show UNALLOCATED
-      label = "<strong>"+$(this).val().replace(/\: /g, "</strong><br>")
+      label = "<strong>"+$(this).text().replace(/\: /g, "</strong><br>")
       var btn = $('<div class="btn btn-easi-toggle" data-value="'+$(this).val()+'"><span>'+label+'</span></div>');
       $('.allocation-btns').append(btn);
     }
