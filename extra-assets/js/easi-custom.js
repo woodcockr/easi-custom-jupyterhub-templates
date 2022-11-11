@@ -37,5 +37,14 @@
       showInfo();
   });
 
+  $('#kubespawner-profiles-list').on('change', function() {
+    $('#kubespawner-profiles-list input[type="radio"]').each(function(){
+      if ($(this).is(':checked')) {
+        $(this).closest('label').addClass('selected')
+      } else {
+        $(this).closest('label').removeClass('selected')
+      }
+    });
+  })
 
 })(jQuery);

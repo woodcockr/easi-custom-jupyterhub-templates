@@ -40,7 +40,6 @@
 
 .btn.btn-easi-toggle {
     color: #033672;
-    background: #e9edf3;
     border: solid 1px #033672;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -49,17 +48,18 @@
     white-space: pre-wrap;
 }
 
-.btn.btn-easi-toggle:hover {
-    background-color: #bec8da;
-}
-
-.btn.btn-easi-toggle.on {
-    background-color: #033672;
-    color: #FFF;
-}
-
 .allocation-btns .btn-easi-toggle {
     flex-basis: 171px;
+}
+
+.btn.btn-easi-toggle:hover, #kubespawner-profiles-list label:hover {cursor: pointer;
+    background-color: #e9edf3;
+    color: #033672;
+}
+
+.btn.btn-easi-toggle.on, #kubespawner-profiles-list label.selected {
+    box-shadow: inset 0 0 0 2px #033672;
+    background-color: #e9edf3;
 }
 
 .navbar.navbar-default {
