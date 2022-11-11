@@ -57,7 +57,12 @@
     color: #033672;
 }
 
-.btn.btn-easi-toggle.on, #kubespawner-profiles-list label.selected {
+.btn.btn-easi-toggle.on {
+    box-shadow: inset 0 0 0 1px #033672;
+    background-color: #e9edf3;
+}
+
+#kubespawner-profiles-list label.selected {
     box-shadow: inset 0 0 0 2px #033672;
     background-color: #e9edf3;
 }
