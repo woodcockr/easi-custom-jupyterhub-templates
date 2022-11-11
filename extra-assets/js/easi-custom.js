@@ -38,9 +38,21 @@
   });
 
   // SPAWNER LOGOS
+  cols = $('.spawner-logos').closest('.col-md-11');
+  cols.each(function(){
+    $(this).removeClass('col-md-11');
+    $(this).addClass('col-md-9');
+    logos = $(this).find('.spawner-logos')
+    logos.addClass('col-md-2');
+    $(this).closest('label').append(logos);
+  })
+  
+  $('.spawner-logos').addClass('col-md-2');
   $('.spawner-logos .r-logo').append('<img src="/hub/static/extra-assets/images/r-logo.png">');
   $('.spawner-logos .python-logo').append('<img src="/hub/static/extra-assets/images/python-logo.png">');
   $('.spawner-logos .nvidia-logo').append('<img src="/hub/static/extra-assets/images/nvidia-logo.png">');
+
+  
 
   // SPAWNER STYLING
   $('#kubespawner-profiles-list').on('change', function() {
