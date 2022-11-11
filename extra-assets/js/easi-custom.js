@@ -37,6 +37,12 @@
       showInfo();
   });
 
+  // SPAWNER LOGOS
+  $('.spawner-logos .r-logo').append('<img src="/hub/static/extra-assets/images/r-logo.png">');
+  $('.spawner-logos .python-logo').append('<img src="/hub/static/extra-assets/images/python-logo.png">');
+  $('.spawner-logos .nvidia-logo').append('<img src="/hub/static/extra-assets/images/nvidia-logo.png">');
+
+  // SPAWNER STYLING
   $('#kubespawner-profiles-list').on('change', function() {
     $('#kubespawner-profiles-list input[type="radio"]').each(function(){
       if ($(this).is(':checked')) {

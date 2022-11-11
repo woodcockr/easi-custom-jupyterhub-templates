@@ -125,3 +125,16 @@
     max-height: 100px;
     margin: 10px 20px;
 }
+
+.spawner-logos {
+    float: right;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-basis: fit-content;
+    justify-content: end;
+}
+
+.spawner-logos .r-logo, .spawner-logos .python-logo, .spawner-logos .nvidia-logo {
+    margin-left: 8px;
+}
