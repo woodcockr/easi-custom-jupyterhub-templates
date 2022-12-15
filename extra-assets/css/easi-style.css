@@ -1,64 +1,162 @@
-@font-face {
-    font-family: "Panton Black Caps";
-    /* src: url("http://ff.cdn.1001fonts.net/p/a/panton.black-caps.otf") */
-    src: url("panton.black-caps.otf");
-}
+/* Two primary colours are in use:
+* Dark - e.g. #043672 - used for heading text, button hover text and the right-hand end of the navbar gradient
+* Highlight - e.g. #00E9C5 - used for button colours
+* These can be updated as needed, along with any contrasting colours to ensure visual compatibility on buttons, etc.
+*/
 
-@font-face {
-    font-family: "Panton Light Caps";
-    src: url("panton.light-caps.otf");
-}
-
+/* GENERAL STYLING */
 .easi h1 {
-  color: #003B71;
-  font-family: "Panton Black Caps";
+  color: #043672;
+  font-family: "Montserrat",sans-serif;
+  font-weight: bold;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
 .easi h2 {
-  font-family: "Panton Light Caps";
+  font-family: "Montserrat",sans-serif;
   font-size: 2rem;
-  color: #003B71;
+  color: #043672;
   margin-bottom: 20px;
 }
 
 .easi p {
   font-size: 1.7rem;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "Montserrat",sans-serif;
 }
 
+/* BUTTONS */
+/* Start & Stop server buttons */
+.btn-jupyter, #stop, #start {
+    color: #fff;
+    background-color: #00E9C5 !important;
+    border-color: #00E9C5 !important;
+    border: none !important;
+}
 
+.btn-jupyter:hover, #stop:hover, #start:hover {
+    color: #043672 !important;
+}
+
+/* Resource & allocation selection buttons and spawner profiles */
+.resources-btns, .allocation-btns {
+    display: flex;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+    flex-grow: 0;
+    flex-wrap: wrap;
+}
+
+.btn.btn-easi-toggle {
+    color: #043672;
+    border: solid 1px #043672;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    flex-basis: 100px;
+    flex-grow: 0;
+    white-space: pre-wrap;
+}
+
+.allocation-btns .btn-easi-toggle {
+    flex-basis: 171px;
+}
+
+.btn.btn-easi-toggle:hover, #kubespawner-profiles-list label:hover {
+    cursor: pointer;
+    background-color: #04367210; /* This is the dark colour with transparency added */
+    color: #043672;
+}
+
+.btn.btn-easi-toggle.on {
+    box-shadow: inset 0 0 0 1px #043672;
+    background-color: #04367210; /* This is the dark colour with transparency added */
+}
+
+#kubespawner-profiles-list label.selected {
+    box-shadow: inset 0 0 0 2px #043672;
+    background-color: #04367210; /* This is the dark colour with transparency added */
+}
+
+/* NAVBAR */
 .navbar.navbar-default {
-  background: -webkit-linear-gradient(left, #ffffff, #003B71); /* Chrome10+, Safari5.1+ */
-  background: linear-gradient(left, #ffffff, #003B71);
+  background: -webkit-linear-gradient(left, #ffffff, #043672); /* Chrome10+, Safari5.1+ */
+  background: linear-gradient(left, #ffffff, #043672);
   border: None;
 }
 
 .navbar.navbar-default .navbar-nav>li>a, .navbar.navbar-default .navbar-text {
+    color: #043672;
+    line-height: 32px;
+}
+
+.dropdown-menu>li>a {
+    line-height: 32px;
+}
+
+.navbar.navbar-default .navbar-right .navbar-text {
     color: #fff;
+    line-height: 32px;
+}
+
+.navbar.navbar-default .navbar-right .btn-jupyter {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .navbar.navbar-default .navbar-nav>li>a:hover, .navbar.navbar-default .navbar-nav>li>a:focus {
-    background-color: #00a3b0;
+    background-color: #00E9C5;
+    color: #FFF;
 }
 
 .navbar.navbar-default .navbar-nav>.open>a, .navbar.navbar-default .navbar-nav>.open>a:hover, .navbar.navbar-default .navbar-nav>.open>a:focus  {
-    background-color: #00a3b0;
+    background-color: #00E9C5;
+    color: #FFF;
 }
+
+.navbar-nav>li>a {
+    line-height: 32px;
+}
+
+/* LOGOS */
+#jupyterhub-logo .jpy-logo {
+    height: 40px !important;
+    margin-top: 6px!important;
+    margin-bottom: 6px!important;
+    margin-right: 30px!important;
+}
+
+.easi-partner-logos img {
+    max-height: 100px;
+    margin: 10px 20px;
+}
+
+.spawner-logos {
+    float: right !important;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-basis: fit-content;
+    padding: 0 !important;
+    justify-content: end;
+}
+
+.spawner-logos img {
+    max-height: 60px;
+    max-width: 60px;
+}
+
+/* MISCELLANEOUS */
 
 #login-main .auth-form-header {
-    background: #00a9ce !important;
-}
-
-
-.btn-jupyter {
-    color: #fff;
-    background-color: #E50051 !important;
-    border-color: #E50051 !important;
+    background: #00E9C5 !important;
 }
 
 #login-main .service-login {
     vertical-align: top !important;
     padding-top: 60px;
+}
+
+#spawn_form {
+    margin-bottom: 50px;
 }
