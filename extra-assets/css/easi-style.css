@@ -1,3 +1,10 @@
+/* Two primary colours are in use:
+* Dark - e.g. #043672 - used for heading text, button hover text and the right-hand end of the navbar gradient
+* Highlight - e.g. #00E9C5 - used for button colours
+* These can be updated as needed, along with any contrasting colours to ensure visual compatibility on buttons, etc.
+*/
+
+/* GENERAL STYLING */
 .easi h1 {
   color: #043672;
   font-family: "Montserrat",sans-serif;
@@ -18,6 +25,8 @@
   font-family: "Montserrat",sans-serif;
 }
 
+/* BUTTONS */
+/* Start & Stop server buttons */
 .btn-jupyter, #stop, #start {
     color: #fff;
     background-color: #00E9C5 !important;
@@ -26,9 +35,10 @@
 }
 
 .btn-jupyter:hover, #stop:hover, #start:hover {
-    color: #033672 !important;
+    color: #043672 !important;
 }
 
+/* Resource & allocation selection buttons and spawner profiles */
 .resources-btns, .allocation-btns {
     display: flex;
     justify-content: flex-start;
@@ -39,8 +49,8 @@
 }
 
 .btn.btn-easi-toggle {
-    color: #033672;
-    border: solid 1px #033672;
+    color: #043672;
+    border: solid 1px #043672;
     margin-right: 5px;
     margin-bottom: 5px;
     flex-basis: 100px;
@@ -52,21 +62,23 @@
     flex-basis: 171px;
 }
 
-.btn.btn-easi-toggle:hover, #kubespawner-profiles-list label:hover {cursor: pointer;
-    background-color: #e9edf3;
-    color: #033672;
+.btn.btn-easi-toggle:hover, #kubespawner-profiles-list label:hover {
+    cursor: pointer;
+    background-color: #04367210; /* This is the dark colour with transparency added */
+    color: #043672;
 }
 
 .btn.btn-easi-toggle.on {
-    box-shadow: inset 0 0 0 1px #033672;
-    background-color: #e9edf3;
+    box-shadow: inset 0 0 0 1px #043672;
+    background-color: #04367210; /* This is the dark colour with transparency added */
 }
 
 #kubespawner-profiles-list label.selected {
-    box-shadow: inset 0 0 0 2px #033672;
-    background-color: #e9edf3;
+    box-shadow: inset 0 0 0 2px #043672;
+    background-color: #04367210; /* This is the dark colour with transparency added */
 }
 
+/* NAVBAR */
 .navbar.navbar-default {
   background: -webkit-linear-gradient(left, #ffffff, #043672); /* Chrome10+, Safari5.1+ */
   background: linear-gradient(left, #ffffff, #043672);
@@ -106,24 +118,12 @@
     line-height: 32px;
 }
 
-#login-main .auth-form-header {
-    background: #00E9C5 !important;
-}
-
-#login-main .service-login {
-    vertical-align: top !important;
-    padding-top: 60px;
-}
-
+/* LOGOS */
 #jupyterhub-logo .jpy-logo {
     height: 40px !important;
     margin-top: 6px!important;
     margin-bottom: 6px!important;
     margin-right: 30px!important;
-}
-
-#spawn_form {
-    margin-bottom: 50px;
 }
 
 .easi-partner-logos img {
@@ -144,4 +144,19 @@
 .spawner-logos img {
     max-height: 60px;
     max-width: 60px;
+}
+
+/* MISCELLANEOUS */
+
+#login-main .auth-form-header {
+    background: #00E9C5 !important;
+}
+
+#login-main .service-login {
+    vertical-align: top !important;
+    padding-top: 60px;
+}
+
+#spawn_form {
+    margin-bottom: 50px;
 }
