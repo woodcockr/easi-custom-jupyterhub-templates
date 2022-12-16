@@ -8,7 +8,7 @@
       var btn = $('<div class="btn btn-easi-toggle" data-value="'+$(this).val()+'"><span>'+label+'</span></div>');
       $('.allocation-btns').append(btn);
   });
-  
+
   $($('.allocation-btns .btn')[0]).addClass('on');
   $("#allocation-select").hide()
 
@@ -51,13 +51,14 @@
     logos.addClass('col-md-2');
     $(this).closest('label').append(logos);
   })
-  
+
   $('.spawner-logos').addClass('col-md-2');
   $('.spawner-logos .r-logo').append('<img src="/hub/static/extra-assets/images/r-logo.png">');
+  $('.spawner-logos .xt-logo').append('<img src="/hub/static/extra-assets/images/XT-logo.png">');
   $('.spawner-logos .python-logo').append('<img src="/hub/static/extra-assets/images/python-logo.png">');
   $('.spawner-logos .nvidia-logo').append('<img src="/hub/static/extra-assets/images/nvidia-logo.png">');
   // END SPAWNER LOGOS
-  
+
   // SPAWNER STYLING
   // Coment out this section to stop adding custom styling to spawner groups
   $('#kubespawner-profiles-list').on('change', function() {
