@@ -53,13 +53,9 @@
     border: solid 1px #004b87;
     margin-right: 5px;
     margin-bottom: 5px;
-    flex-basis: 100px;
+    flex-basis: 171px;
     flex-grow: 0;
     white-space: pre-wrap;
-}
-
-.allocation-btns .btn-easi-toggle {
-    flex-basis: 171px;
 }
 
 .btn.btn-easi-toggle:hover, #kubespawner-profiles-list label:hover {
