@@ -7,7 +7,7 @@
   const allocs = $("#allocation-select option");
 
   if (allocs.length == 0 || (allocs.length == 1 && allocs[0].value == NO_ALLOC_VALUE)) {
-    $(".easi-alloactions-alert").removeClass("alert-info").addClass("alert-danger");
+    $(".easi-allocations-alert").removeClass("alert-info").addClass("alert-danger");
   }
   // END ALLOCATION ALERT
 
