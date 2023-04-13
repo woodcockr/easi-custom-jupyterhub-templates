@@ -1,4 +1,19 @@
 (function ($) {
+  // ALLOCATION ALERT 
+  //
+  // Highlight the allocations blurb is the user has no allocations or only the
+  // "unallocated" one.
+  const NO_ALLOC_VALUE = "UNALLOCATED";
+  const allocs = $("#allocation-select option");
+
+  if (allocs.length == 0 || (allocs.length == 1 && allocs[0].value == NO_ALLOC_VALUE)) {
+    $(".easi-no-allocations").show();
+  }
+  else {
+    $(".easi-no-allocations").hide();
+  }
+  // END ALLOCATION ALERT
+
   // ALLOCATION BUTTONS
   // Comment out this section to disable the conversion of the allocation selection dropdown to buttons
   $("#allocation-select").parent().append("<div class='allocation-btns'></div>")
