@@ -7,10 +7,10 @@
   const allocs = $("#allocation-select option");
 
   if (allocs.length == 0 || (allocs.length == 1 && allocs[0].value == NO_ALLOC_VALUE)) {
-    $(".easi-no-allocations-alert").show();
+    $(".easi-no-allocations").show();
   }
   else {
-    $(".easi-no-allocations-alert").hide();
+    $(".easi-no-allocations").hide();
   }
   // END ALLOCATION ALERT
 
