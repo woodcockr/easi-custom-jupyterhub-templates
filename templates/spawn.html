@@ -1,15 +1,22 @@
 {% extends "templates/spawn.html" %}
 
 {% block heading %}
-<div class="row text-center">
+<div class="row text-center easi">
     <h1>Server Options</h1>
 
-    <div class="container text-center announcement alert alert-info easi-allocations-alert">
-        {%- if easi_allocations_blurb is string -%}
-            {{ easi_allocations_blurb | safe }}
+    {%- if easi_allocations_msg is string -%}
+        {{ easi_allocations_msg | safe }}
+    {%- else -%}
+        <p>Contact your administrator to add or update project allocations.</p>
+    {%- endif -%}
+
+    <div class="container text-center announcement alert alert-danger easi-no-allocations">
+        {%- if easi_no_allocations_msg is string -%}
+            {{ easi_no_allocations_msg | safe }}
         {%- else -%}
-            Contact your administrator to add or update project allocations.
+            <p>You have no project allocations. Your access may be limited or denied until you do.</p>
         {%- endif -%}
     </div>
+
 </div>
 {% endblock %}
