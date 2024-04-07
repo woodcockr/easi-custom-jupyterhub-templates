@@ -1,26 +1,26 @@
 {% extends "templates/login.html" %}
 
 {% block main %}
-<div class="container text-center easi">
-    <h1>{{ easi_hub_title or 'EASI JupyterHub' }}</h1>
-    <h2>{{ easi_hub_subtitle }}</h2>
-    <div>
-      {% if easi_welcome %}
-      {% for paragraph in easi_welcome %}
-      <p>{{ (paragraph | safe) }}</p>
+<div class="container text-center easi-login">
+  <h1>{{ easi_hub_title or 'EASI JupyterHub' }}</h1>
+  <h2>{{ easi_hub_subtitle }}</h2>
+  <div>
+    {% if easi_welcome %}
+    {% for paragraph in easi_welcome %}
+    <p>{{ (paragraph | safe) }}</p>
+    {% endfor %}
+    {% else %}
+    <p>Welcome to this EASI JupyterHub. For more information about EASI,
+    visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.</p>
+    {% endif %}
+    {% if easi_partner_logos %}
+    <div class="easi-partner-logos">
+      {% for logo in easi_partner_logos %}
+      <a href="{{logo.href}}" target="_blank"><img src="{{static_url(logo.src)}}"></a>
       {% endfor %}
-      {% else %}
-      <p>Welcome to this EASI JupyterHub. For more information about EASI,
-      visit <a href="https://research.csiro.au/cceo/underpinning-technologies/earth-analytics/">reasearch.csiro.au</a>.</p>
-      {% endif %}
-      {% if easi_partner_logos %}
-      <div class="easi-partner-logos">
-        {% for logo in easi_partner_logos %}
-        <a href="{{logo.href}}" target="_blank"><img src="{{static_url(logo.src)}}"></a>
-        {% endfor %}
-      </div>
-      {% endif %}
     </div>
+    {% endif %}
+  </div>
 </div>
 {{ super() }}
 {% endblock %}

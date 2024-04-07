@@ -1,22 +1,44 @@
 {% extends "templates/spawn.html" %}
 
-{% block heading %}
-<div class="row text-center easi">
+{% block main %}
+<div class="container">
+  {% block heading %}
+  <div>
     <h1>Server Options</h1>
-
-    {%- if easi_allocations_msg is string -%}
-        {{ easi_allocations_msg | safe }}
-    {%- else -%}
-        <p>Contact your administrator to add or update project allocations.</p>
-    {%- endif -%}
-
-    <div class="container text-center announcement alert alert-danger easi-no-allocations">
-        {%- if easi_no_allocations_msg is string -%}
-            {{ easi_no_allocations_msg | safe }}
-        {%- else -%}
-            <p>You have no project allocations. Your access may be limited or denied until you do.</p>
-        {%- endif -%}
-    </div>
-
+  </div>
+  {% endblock %}
+  <div class="easi-spawner">
+    {% if for_user and user.name != for_user.name -%}
+      <p>Spawning server for {{ for_user.name }}</p>
+    {% endif -%}
+    {% if error_message -%}
+      <p class="spawn-error-msg text-danger">
+        Error: {{error_message}}
+      </p>
+    {% endif %}
+    <script>
+      window.spawnerProps = {
+        ...window.spawnerProps,
+        spawnUrl: "{{ url | replace('"', '\\"') | safe }}",
+        messages: {
+          allocations: "<p>Contact your administrator to add or update workspaces.</p>",
+          noAllocations: "<p>You have no workspaces. Your access may be limited or denied until you do</p>",
+        }
+      };
+      {%- if easi_allocations_msg is string -%}
+      spawnerProps.messages.allocations = "{{ easi_allocations_msg | replace('"', '\\"') | safe }}";
+      {%- endif -%}
+      {%- if easi_allocations_msg is string -%}
+      spawnerProps.messages.noAllocations = "{{ easi_no_allocations_msg | replace('"', '\\"') | safe }}";
+      {%- endif -%}
+    </script>
+    <div id="spawner-page-app"></div>
+    {{spawner_options_form | safe}}
+  </div>
 </div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="{{static_url("extra-assets/js")}}/easi-spawner.js"></script>
 {% endblock %}

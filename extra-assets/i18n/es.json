@@ -1,0 +1,15 @@
+{
+  "es": {
+    "spawner": {
+      "workspace": "Espacio de trabajo",
+      "features": "Características",
+      "profiles": "Perfiles",
+      "resources": "Recursos",
+      "cpu": "Núcleos de CPU",
+      "gpu": "GPU",
+      "ram": "RAM (GB)",
+      "storage": "Almacenamiento (GB)",
+      "type": "Tipo"
+    }
+  }
+}

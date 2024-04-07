@@ -1,43 +1,190 @@
 {% extends "templates/page.html" %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="{{ static_url("extra-assets/css/easi-style.css") }}" type="text/css"/>
-<link rel="stylesheet" href="{{ static_url("css/style.min.css") }}" type="text/css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{static_url("css/style.min.css") }}" type="text/css" />
+<link rel="stylesheet" href="{{static_url("extra-assets/css/easi-style.css") }}" type="text/css" />
+<style>
+  :root {
+    --easi-primary-color: {{easi_primary_colour | default("#004b87")}};
+    --easi-secondary-color: #42CCD3;
+  }
+</style>
+<style type="text/less">
+  @import (less) "https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/less/mixins/buttons.less";
+  @import (less) "https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/less/mixins/background-variant.less";
+  @import (less) "https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/less/mixins/text-emphasis.less";
+
+  @primary-color: {{easi_primary_colour | default("#004b87")}};
+  .btn-jupyter, .btn-primary {
+    .button-variant(@color: #fff; @background: @primary-color; @border: @primary-color);
+  }
+
+  .bg-primary {
+    .bg-variant(@color: @primary-color);
+  }
+
+  .text-primary {
+    .text-emphasis-variant(@color: @primary-color);
+  }
+
+  a {
+    color: @primary-color;
+
+    &:hover,
+    &:focus {
+      color: darken(@primary-color, 15%);
+    }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/less" ></script>
 {% endblock %}
 
-{% block login_widget %}
-<span id="login_widget">
-    {% if user %}
-    <p class="navbar-text">{{user.name}}</p>
-    <a id="logout" role="button" class="btn navbar-btn btn-jupyter btn-default" href="{{logout_url}}"> <i aria-hidden="true"
-            class="fa fa-sign-out"></i> Logout</a>
-    {% else %}
-    <a id="login" role="button" class="btn navbar-btn btn-jupyter btn-default" href="{{login_url}}">Login</a>
-    {% endif %}
-</span>
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/i18n-js@4.4.3/dist/browser/index.min.js"></script>
+<script>
+  const easiI18n = {
+    hasLoaded: false,
+    listeners: [],
+    onLoad: function(cb) {
+      if (this.hasLoaded) {
+        cb();
+      } else {
+        this.listeners.push(cb);
+      }
+    },
+    notify: function() {
+      this.hasLoaded = true;
+      this.listeners.forEach((cb) => cb());
+    }
+  }
+
+  const i18n = new I18n.I18n();
+  i18n.defaultLocale = "en";
+  i18n.enableFallback = true;
+
+  async function loadTranslations(i18n, locale) {
+    const response = await fetch(
+      `/hub/static/extra-assets/i18n/${locale}.json`
+    );
+    const translations = await response.json();
+    i18n.store(translations);
+  }
+  (async() => {
+    const loaders = [loadTranslations(i18n, "en")];
+    const languageCode = navigator.language.split('-')[0];
+    if (languageCode !== "en") {
+      i18n.locale = languageCode;
+      loaders.push(loadTranslations(i18n, languageCode));
+    }
+    await Promise.all(loaders);
+    easiI18n.notify();
+  })();
+</script>
+<script>
+    require.config({
+    paths: {
+      'react': 'https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min',
+      'react-dom': 'https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min',
+      'lodash': 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min',
+      "clsx": "https://cdn.jsdelivr.net/npm/clsx@2.1.0/dist/clsx.min",
+    }
+  });
+</script>
+{% endblock %}
+
+{% block nav_bar %}
+<div class="easi-nav">
+  <nav class="container">      
+    <div class="easi-nav__content">
+      <a title='Home' class="easi-nav__start" href="{{logo_url or base_url}}">
+        <img src="{{static_url("extra-assets/images/CSIRO_AU_Logo.png")}}" alt="CSIRO logo" class="easi-nav__logo">
+        <h1 class="easi-nav__title">Earth Analytics Science<br>&amp; Innovation Platform</h1>
+      </a>
+      <div class="easi-nav__end">
+        <a href="https://www.csiro.au"  class="easi-nav__csiro-link" target="_blank" rel="noreferrer">CSIRO.AU</a>
+        <hr class="easi-nav__divider">
+        {% if user %}
+        <ul class="nav navbar-nav easi-nav__links">
+          {% block nav_bar_left_items %}
+          <li><a href="{{base_url}}home">Home</a></li>
+          <li><a href="{{base_url}}token">Token</a></li>
+          {% if easi_release_notes %}
+          <li id="release-notes-app"></li>
+          <script>
+            window.easiReleaseNotes = "{{ easi_release_notes | replace('"', '\\"') | safe }}";
+          </script>
+          <script src="{{static_url("extra-assets/js")}}/easi-release-notes.js"></script>
+          {% endif %}
+          {% if 'admin-ui' in parsed_scopes %}
+          <li><a href="{{base_url}}admin">Admin</a></li>
+          {% endif %}
+          {% if services %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              {% for service in services %}
+              {% block service scoped %}
+              <li><a class="dropdown-item" href="{{service.href}}">{{service.name}}</a></li>
+              {% endblock %}
+              {% endfor %}
+            </ul>
+          </li>
+          {% endif %}
+          {% endblock %}
+          {% block nav_bar_right_items %}
+          <li>
+            {% block login_widget %}
+            <span id="login_widget">
+              {% if user %}
+              <p class="navbar-text">{{user.name}}</p>
+              <a id="logout" role="button" class="btn navbar-btn btn-primary" href="{{logout_url}}"> 
+                <i aria-hidden="true" class="fa fa-sign-out"></i> Logout
+              </a>
+              {% else %}
+              <a id="login" role="button" class="btn navbar-btn btn-primary" href="{{login_url}}">Login</a>
+              {% endif %}
+            </span>
+            {% endblock %}
+          </li>
+          {% endblock %}
+        </ul>
+        {% endif %}
+        {% if user %}
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#thenavbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+</div>
 {% endblock %}
 
 {% block announcement %}
 {% if announcement %}
-    {% if announcement_level %}
-        {% if announcement_level == "info" %}
-            {% set level = "alert-info" %}
-        {% elif announcement_level == "success" %}
-            {% set level = "alert-success" %}
-        {% elif announcement_level == "warning" %}
-            {% set level = "alert-warning" %}
-        {% elif announcement_level == "danger" %}
-            {% set level = "alert-danger" %}
-        {% else %}
-            {% set level = "alert-warning" %}
-        {% endif %}
-    {% endif %}
-<div class="container text-center announcement alert {{ level }}">
+{% if announcement_level %}
+{% if announcement_level == "info" %}
+{% set level = "alert-info" %}
+{% elif announcement_level == "success" %}
+{% set level = "alert-success" %}
+{% elif announcement_level == "warning" %}
+{% set level = "alert-warning" %}
+{% elif announcement_level == "danger" %}
+{% set level = "alert-danger" %}
+{% else %}
+{% set level = "alert-warning" %}
+{% endif %}
+{% endif %}
+<div class="container">
+  <div class="text-center announcement alert {{ level }}">
     {{ announcement | safe }}
+  </div>
 </div>
 {% endif %}
-{% endblock %}
-
-{% block script %}
-<script src="{{static_url("extra-assets/js/easi-custom.js") }}"></script>
 {% endblock %}
