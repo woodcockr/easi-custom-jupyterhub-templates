@@ -45,51 +45,17 @@
 {% block meta %}
 <script src="https://cdn.jsdelivr.net/npm/i18n-js@4.4.3/dist/browser/index.min.js"></script>
 <script>
-  const easiI18n = {
-    hasLoaded: false,
-    listeners: [],
-    onLoad: function(cb) {
-      if (this.hasLoaded) {
-        cb();
-      } else {
-        this.listeners.push(cb);
-      }
-    },
-    notify: function() {
-      this.hasLoaded = true;
-      this.listeners.forEach((cb) => cb());
-    }
-  }
-
-  const i18n = new I18n.I18n();
-  i18n.defaultLocale = "en";
-  i18n.enableFallback = true;
-
-  async function loadTranslations(i18n, locale) {
-    const response = await fetch(
-      `/hub/static/extra-assets/i18n/${locale}.json`
-    );
-    const translations = await response.json();
-    i18n.store(translations);
-  }
-  (async() => {
-    const loaders = [loadTranslations(i18n, "en")];
-    const languageCode = navigator.language.split('-')[0];
-    if (languageCode !== "en") {
-      i18n.locale = languageCode;
-      loaders.push(loadTranslations(i18n, languageCode));
-    }
-    await Promise.all(loaders);
-    easiI18n.notify();
-  })();
-</script>
-<script>
     require.config({
     paths: {
       'react': 'https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min',
       'react-dom': 'https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min',
       'lodash': 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min',
-      "clsx": "https://cdn.jsdelivr.net/npm/clsx@2.1.0/dist/clsx.min",
+      'clsx': 'https://cdn.jsdelivr.net/npm/clsx@2.1.0/dist/clsx.min',
+      'I18n': "https://cdn.jsdelivr.net/npm/i18n-js@4.4.3/dist/browser/index.min",
+      'easi-i18n': '{{static_url("extra-assets/js/easi-i18n")}}',
+    },
+    shim: {
+        "I18n": { exports: "I18n" }
     }
   });
 </script>

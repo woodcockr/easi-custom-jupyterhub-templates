@@ -5,11 +5,15 @@
       "features": "Características",
       "profiles": "Perfiles",
       "resources": "Recursos",
+      "version": "versión",
       "cpu": "Núcleos de CPU",
       "gpu": "GPU",
       "ram": "RAM (GB)",
       "storage": "Almacenamiento (GB)",
-      "type": "Tipo"
+      "type": "Tipo",
+      "show_less_options": "Mostrar menos opciones",
+      "show_more_options": "Mostrar más opciones",
+      "start": "Comenzar"
     }
   }
 }
