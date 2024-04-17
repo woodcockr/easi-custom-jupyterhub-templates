@@ -18,10 +18,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       label: "Small",
       resourcesConfiguration: {
         cpu: 2,
-        gpu: {
-          count: 0,
-          type: "v100",
-        },
         ram: 16,
         storage: {
           count: 0,
@@ -33,10 +29,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       label: "Medium",
       resourcesConfiguration: {
         cpu: 8,
-        gpu: {
-          count: 2,
-          type: "v100",
-        },
         ram: 64,
         storage: {
           count: 0,
@@ -48,10 +40,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       label: "Large",
       resourcesConfiguration: {
         cpu: 32,
-        gpu: {
-          count: 8,
-          type: "v100",
-        },
         ram: 256,
         storage: {
           count: 0,
@@ -480,10 +468,10 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
           {
             key: label,
             className: clsx("btn btn-lg", {
-              "btn-primary": _.isEqual(value, resourcesConfiguration),
-              "btn-default": !_.isEqual(value, resourcesConfiguration),
+              "btn-primary": _.isMatch(value, resourcesConfiguration),
+              "btn-default": !_.isMatch(value, resourcesConfiguration),
             }),
-            onClick: () => onChange(resourcesConfiguration),
+            onClick: () => onChange({ ...value, ...resourcesConfiguration }),
           },
           label
         )
