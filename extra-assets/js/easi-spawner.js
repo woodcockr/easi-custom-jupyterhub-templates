@@ -5,7 +5,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
   clsx,
   { useI18n, I18nProvider }
 ) {
-  const { createElement: e, useState } = React;
+  const { createElement: e, useState, useEffect } = React;
 
   const logos = {
     GPU: "/hub/static/extra-assets/images/nvidia-logo.png",
@@ -152,6 +152,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     profiles,
     resourcesConfiguration,
     selected,
+    allFeatures,
   }) => {
     const workspace = _.defaultTo(
       _.find(workspaces, { code: _.get(selected, "workspace_code") }),
@@ -169,7 +170,10 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       resourcesConfiguration,
       selected,
     });
-    const features = _.defaultTo(_.get(selected, "features"), []);
+    const features = _.intersection(
+      allFeatures,
+      _.defaultTo(_.get(selected, "features"), [])
+    );
     return { workspace, resources, profile, version, features };
   };
 
@@ -332,8 +336,16 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     );
 
   const Profiles = ({ options, value, onChange }) => {
+    const numberOfItemsToNotHide = 4;
     const i18n = useI18n();
     const [showAll, setShowAll] = useState(false);
+    useEffect(() => {
+      setShowAll(
+        (current) =>
+          current || _.findIndex(options, value) >= numberOfItemsToNotHide
+      );
+    }, [options, value]);
+    const hasMore = options.length > numberOfItemsToNotHide && !showAll;
     return e("div", { className: "mb-5" }, [
       e("div", {}, e("label", {}, i18n.t("spawner.profiles"))),
       e(
@@ -353,7 +365,11 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
                 )
               )
             : _.map(
-                _.slice(options, 0, showAll ? options.length : 4),
+                _.slice(
+                  options,
+                  0,
+                  showAll ? options.length : numberOfItemsToNotHide
+                ),
                 (profile) =>
                   e(
                     "div",
@@ -394,16 +410,14 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
               )
         )
       ),
-      options.length > 4 &&
+      hasMore &&
         e(
           "button",
           {
-            onClick: () => setShowAll(!showAll),
+            onClick: () => setShowAll(true),
             className: "btn btn-link",
           },
-          i18n.t(
-            showAll ? "spawner.show_less_options" : "spawner.show_more_options"
-          )
+          i18n.t("spawner.show_more_options")
         ),
     ]);
   };
@@ -487,11 +501,79 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       })
     );
 
+  const GpuResource = ({ resourcesConfiguration, value, onChange }) => {
+    const i18n = useI18n();
+    return e(
+      Resource,
+      {},
+      e(NumberInput, {
+        name: i18n.t("spawner.gpu"),
+        min: _.max([resourcesConfiguration.gpu.count.min, 1]),
+        max: resourcesConfiguration.gpu.count.max,
+        onChange: (count) =>
+          onChange({ ...value, gpu: { ...value.gpu, count } }),
+        value: value.gpu.count,
+      }),
+      e("div", { className: "d-flex align-items-center mt-3" }, [
+        e(
+          "label",
+          {
+            htmlFor: "gpu-type",
+            className: "mb-0 me-2 fw-normal",
+          },
+          i18n.t("spawner.type")
+        ),
+        e(
+          "select",
+          {
+            id: "gpu-type",
+            className: "form-control input-sm",
+            value: value.gpu.type,
+            onChange: (e) =>
+              onChange({
+                ...value,
+                gpu: { ...value.gpu, type: e.target.value },
+              }),
+          },
+          _.map(resourcesConfiguration.gpu.types, ({ label, value }) =>
+            e("option", { value }, label)
+          )
+        ),
+      ])
+    );
+  };
+
   const Resources = ({ resourcesConfiguration, value, onChange }) => {
     const i18n = useI18n();
     return e("div", { className: "mb-5" }, [
       e("div", {}, e("label", {}, i18n.t("spawner.resources"))),
-      e(ResourcePresets, { value, onChange }),
+      e("div", { className: "clearfix" }, [
+        e(
+          "div",
+          { className: "pull-left me-2" },
+          e(ResourcePresets, { value, onChange })
+        ),
+        e(
+          "div",
+          { className: "pull-left" },
+          resourcesConfiguration.gpu.count.max > 0 &&
+            CheckboxInput({
+              name: "Enable GPU",
+              value: value.gpu.count > 0,
+              onChange: () =>
+                onChange({
+                  ...value,
+                  gpu: {
+                    ...value.gpu,
+                    count:
+                      value.gpu.count > 0
+                        ? 0
+                        : _.max([resourcesConfiguration.gpu.count.min, 1]),
+                  },
+                }),
+            })
+        ),
+      ]),
       e("div", { className: "row d-flex flex-wrap mb-n3" }, [
         e(
           Resource,
@@ -516,42 +598,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             value: value.ram,
           })
         ),
-        e(
-          Resource,
-          {},
-          e(NumberInput, {
-            name: i18n.t("spawner.gpu"),
-            min: resourcesConfiguration.gpu.count.min,
-            max: resourcesConfiguration.gpu.count.max,
-            onChange: (count) =>
-              onChange({ ...value, gpu: { ...value.gpu, count } }),
-            value: value.gpu.count,
-          }),
-          e("div", { className: "d-flex align-items-center mt-3" }, [
-            e(
-              "label",
-              {
-                htmlFor: "gpu-type",
-                className: "mb-0 me-2 fw-normal",
-              },
-              i18n.t("spawner.type")
-            ),
-            e(
-              "select",
-              {
-                id: "gpu-type",
-                className: "form-control input-sm",
-                value: value.gpu.type,
-                onChange: (e) =>
-                  onChange({
-                    ...value,
-                    gpu: { ...value.gpu, type: e.target.value },
-                  }),
-              },
-              [e("option", { value: "v100" }, "NVIDIA Tesla V100")]
-            ),
-          ])
-        ),
         e(Resource, {}, [
           e(NumberInput, {
             name: i18n.t("spawner.storage"),
@@ -568,6 +614,8 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             value: value.storage.ssd,
           }),
         ]),
+        value.gpu.count > 0 &&
+          e(GpuResource, { resourcesConfiguration, value, onChange }),
       ]),
     ]);
   };
@@ -580,12 +628,16 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     spawnUrl,
     selected,
   }) => {
-    const features = _.uniq(_.flatten(_.map(profiles, "tags")));
+    const allFeaturesExceptGpu = _.without(
+      _.uniq(_.flatten(_.map(profiles, "tags"))),
+      "GPU"
+    );
     const initial = getInitialValues({
       workspaces,
       profiles,
       resourcesConfiguration,
       selected,
+      allFeatures: allFeaturesExceptGpu,
     });
     const [isStarting, setIsStarting] = useState(false);
     const [selectedFeatures, setSelectedFeatures] = useState(initial.features);
@@ -597,21 +649,25 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     );
     const [selectedProfile, setSelectedProfile] = useState(initial.profile);
     const [selectedVersion, setSelectedVersion] = useState(initial.version);
-    const availableProfiles = _.filter(profiles, ({ tags }) =>
-      _.isEmpty(_.difference(selectedFeatures, tags))
+    const isGpuEnabled = selectedResources.gpu.count > 0;
+    const features = isGpuEnabled
+      ? [...selectedFeatures, "GPU"]
+      : selectedFeatures;
+    const availableProfiles = _.filter(
+      profiles,
+      ({ tags }) =>
+        (isGpuEnabled || !_.includes(tags, "GPU")) &&
+        _.isEmpty(_.difference(features, tags))
     );
     const profile = _.includes(availableProfiles, selectedProfile)
       ? selectedProfile
       : _.first(availableProfiles);
     const hasProfile = !_.isUndefined(profile);
-    const versions = profile.versions;
+    const versions = _.get(profile, "versions", []);
     const version = _.includes(versions, selectedVersion)
       ? selectedVersion
-      : _.first(profile.versions);
+      : _.first(versions);
     const resources = _.cloneDeep(selectedResources);
-    if (_.includes(profile.tags, "GPU")) {
-      resources.gpu.count = resources.gpu.count || 1;
-    }
     return e("section", {}, [
       e("div", {
         className: "mb-5",
@@ -635,7 +691,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             onChange: setSelectedResources,
           }),
           e(Features, {
-            options: features,
+            options: allFeaturesExceptGpu,
             value: selectedFeatures,
             onChange: setSelectedFeatures,
           }),
@@ -644,13 +700,15 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             value: profile,
             onChange: setSelectedProfile,
           }),
-          e(Versions, {
-            options: versions,
-            value: version,
-            onChange: setSelectedVersion,
-          }),
+          hasProfile &&
+            e(Versions, {
+              options: versions,
+              value: version,
+              onChange: setSelectedVersion,
+            }),
         ]),
       !_.isEmpty(workspaces) &&
+        hasProfile &&
         e(Start, {
           spawnUrl,
           workspaceCode: _.get(selectedWorkspace, "code"),

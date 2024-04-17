@@ -11,7 +11,6 @@
       "ram": "RAM (GB)",
       "storage": "Almacenamiento (GB)",
       "type": "Tipo",
-      "show_less_options": "Mostrar menos opciones",
       "show_more_options": "Mostrar más opciones",
       "start": "Comenzar"
     }

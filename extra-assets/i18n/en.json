@@ -11,7 +11,6 @@
       "ram": "RAM (GB)",
       "storage": "Ephemeral storage (GB)",
       "type": "Type",
-      "show_less_options": "Show less options",
       "show_more_options": "Show more options",
       "start": "Start"
     }
