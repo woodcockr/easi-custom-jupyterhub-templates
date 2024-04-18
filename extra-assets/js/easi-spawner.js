@@ -258,7 +258,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     imageTag,
     features,
     profileId,
-    disabled,
   }) => {
     const i18n = useI18n();
     return e(
@@ -304,7 +303,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
                 hidden: isStarting,
               }),
               onClick,
-              disabled,
             },
             i18n.t("spawner.start")
           ),
@@ -620,6 +618,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       _.uniq(_.flatten(_.map(profiles, "tags"))),
       "GPU"
     );
+
     const initial = getInitialValues({
       workspaces,
       profiles,
@@ -627,6 +626,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       selected,
       allFeatures: allFeaturesExceptGpu,
     });
+
     const [isStarting, setIsStarting] = useState(false);
     const [selectedFeatures, setSelectedFeatures] = useState(initial.features);
     const [selectedWorkspace, setSelectedWorkspace] = useState(
@@ -637,25 +637,34 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     );
     const [selectedProfile, setSelectedProfile] = useState(initial.profile);
     const [selectedVersion, setSelectedVersion] = useState(initial.version);
+
     const isGpuEnabled = selectedResources.gpu.count > 0;
-    const features = isGpuEnabled
-      ? [...selectedFeatures, "GPU"]
-      : selectedFeatures;
-    const availableProfiles = _.filter(
+
+    const profilesMatchingResources = _.filter(
       profiles,
-      ({ tags }) =>
-        (isGpuEnabled || !_.includes(tags, "GPU")) &&
-        _.isEmpty(_.difference(features, tags))
+      (profile) => isGpuEnabled === _.includes(profile.tags, "GPU")
+    );
+
+    const availableFeatures = _.without(
+      _.uniq(_.flatten(_.map(profilesMatchingResources, "tags"))),
+      "GPU"
+    );
+    const features = _.intersection(availableFeatures, selectedFeatures);
+
+    const availableProfiles = _.filter(profilesMatchingResources, (profile) =>
+      _.isEmpty(_.difference(features, profile.tags))
     );
     const profile = _.includes(availableProfiles, selectedProfile)
       ? selectedProfile
       : _.first(availableProfiles);
-    const hasProfile = !_.isUndefined(profile);
-    const versions = _.get(profile, "versions", []);
-    const version = _.includes(versions, selectedVersion)
+
+    const availableVersions = _.get(profile, "versions", []);
+    const version = _.includes(availableVersions, selectedVersion)
       ? selectedVersion
-      : _.first(versions);
+      : _.first(availableVersions);
+
     const resources = _.cloneDeep(selectedResources);
+    const hasProfile = !_.isUndefined(profile);
     return e("section", {}, [
       e("div", {
         className: "mb-5",
@@ -679,8 +688,8 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             onChange: setSelectedResources,
           }),
           e(Features, {
-            options: allFeaturesExceptGpu,
-            value: selectedFeatures,
+            options: availableFeatures,
+            value: features,
             onChange: setSelectedFeatures,
           }),
           e(Profiles, {
@@ -690,7 +699,7 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
           }),
           hasProfile &&
             e(Versions, {
-              options: versions,
+              options: availableVersions,
               value: version,
               onChange: setSelectedVersion,
             }),
@@ -706,7 +715,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
           imageTag: _.get(version, "tag"),
           features: selectedFeatures,
           isStarting,
-          disabled: !hasProfile,
           onClick: () => setIsStarting(true),
         }),
     ]);
