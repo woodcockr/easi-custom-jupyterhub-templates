@@ -150,9 +150,12 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
       _.find(profiles, { name: _.get(selected, "profile_id") }),
       _.first(profiles)
     );
-    const version = _.defaultTo(
-      _.find(profile.versions, { tag: _.get(selected, "image_tag") }),
-      _.first(profile.versions)
+    const version = _.get(
+      _.defaultTo(
+        _.find(profile.versions, { tag: _.get(selected, "image_tag") }),
+        _.first(profile.versions)
+      ),
+      "label"
     );
     const resources = getInitialResourcesValue({
       resourcesConfiguration,
@@ -235,12 +238,11 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             {
               id: "versions",
               className: "form-control input-lg",
-              value: value.tag,
-              onChange: (e) =>
-                onChange(_.find(options, { tag: e.target.value })),
+              value,
+              onChange: (e) => onChange(e.target.value),
             },
-            options.map(({ label, tag }) =>
-              e("option", { key: tag, value: tag }, label)
+            options.map((option) =>
+              e("option", { key: option, value: option }, option)
             )
           ),
         ]),
@@ -258,7 +260,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     imageTag,
     features,
     profileId,
-    disabled,
   }) => {
     const i18n = useI18n();
     return e(
@@ -304,7 +305,6 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
                 hidden: isStarting,
               }),
               onClick,
-              disabled,
             },
             i18n.t("spawner.start")
           ),
@@ -637,24 +637,41 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
     );
     const [selectedProfile, setSelectedProfile] = useState(initial.profile);
     const [selectedVersion, setSelectedVersion] = useState(initial.version);
+
     const isGpuEnabled = selectedResources.gpu.count > 0;
-    const features = isGpuEnabled
-      ? [...selectedFeatures, "GPU"]
-      : selectedFeatures;
-    const availableProfiles = _.filter(
+
+    const profilesMatchingResources = _.filter(
       profiles,
-      ({ tags }) =>
-        (isGpuEnabled || !_.includes(tags, "GPU")) &&
-        _.isEmpty(_.difference(features, tags))
+      (profile) => isGpuEnabled === _.includes(profile.tags, "GPU")
+    );
+
+    const availableFeatures = _.uniq(
+      _.flatten(_.map(profilesMatchingResources, "tags"))
+    );
+    const features = _.intersection(availableFeatures, selectedFeatures);
+
+    const profilesMatchingFeatures = _.filter(
+      profilesMatchingResources,
+      (profile) => _.isEmpty(_.difference(features, profile.tags))
+    );
+
+    const availableVersions = _.uniq(
+      _.flatten(
+        _.map(_.flatten(_.map(profilesMatchingFeatures, "versions")), "label")
+      )
+    );
+    const version = _.includes(availableVersions, selectedVersion)
+      ? selectedVersion
+      : _.first(availableVersions);
+
+    const availableProfiles = _.filter(profilesMatchingFeatures, (profile) =>
+      _.find(profile.versions, { label: version })
     );
     const profile = _.includes(availableProfiles, selectedProfile)
       ? selectedProfile
       : _.first(availableProfiles);
+
     const hasProfile = !_.isUndefined(profile);
-    const versions = _.get(profile, "versions", []);
-    const version = _.includes(versions, selectedVersion)
-      ? selectedVersion
-      : _.first(versions);
     const resources = _.cloneDeep(selectedResources);
     return e("section", {}, [
       e("div", {
@@ -678,35 +695,44 @@ require(["react", "react-dom", "lodash", "clsx", "easi-i18n"], function (
             value: resources,
             onChange: setSelectedResources,
           }),
-          e(Features, {
-            options: allFeaturesExceptGpu,
-            value: selectedFeatures,
-            onChange: setSelectedFeatures,
-          }),
+          e("div", { className: "clearfix" }, [
+            e(
+              "div",
+              { className: "pull-left" },
+              e(Features, {
+                options: availableFeatures,
+                value: features,
+                onChange: setSelectedFeatures,
+              })
+            ),
+            !_.isEmpty(availableVersions) &&
+              e(
+                "div",
+                {},
+                e(Versions, {
+                  options: availableVersions,
+                  value: version,
+                  onChange: setSelectedVersion,
+                })
+              ),
+          ]),
           e(Profiles, {
             options: availableProfiles,
             value: profile,
             onChange: setSelectedProfile,
           }),
-          hasProfile &&
-            e(Versions, {
-              options: versions,
-              value: version,
-              onChange: setSelectedVersion,
-            }),
         ]),
       !_.isEmpty(workspaces) &&
         hasProfile &&
         e(Start, {
           spawnUrl,
-          workspaceCode: _.get(selectedWorkspace, "code"),
-          profileId: _.get(profile, "name"),
+          workspaceCode: selectedWorkspace.code,
+          profileId: profile.name,
           resources,
-          spawnerGroupId: _.get(profile, "spawner_group_id"),
-          imageTag: _.get(version, "tag"),
-          features: selectedFeatures,
+          spawnerGroupId: profile.spawner_group_id,
+          imageTag: _.find(profile.versions, { label: version }).tag,
+          features,
           isStarting,
-          disabled: !hasProfile,
           onClick: () => setIsStarting(true),
         }),
     ]);
